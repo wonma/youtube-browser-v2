@@ -1,6 +1,5 @@
 import React from 'react';
-
-import youtube from '../apis/youtube';
+import './SearchBar.css';
 
 class SearchBar extends React.Component {
     state = {
@@ -11,35 +10,27 @@ class SearchBar extends React.Component {
         this.setState({ input });
     }
 
-    onInputSubmit = (e) => {
+    onSubmit = (e) => {
         e.preventDefault();
-        console.log('submit button clicked');
-
-        youtube.get('/search', {
-            params: {
-                part: 'snippet',
-                key: 'AIzaSyADbN4Rgp8q03yJL2IjEocDzxfJKotYFJI',
-                type: 'video',
-                maxResults: 5,
-                channelId: 'UCzfKXReow3r5n1JR5nVlJZw',
-                q: this.state.input
-            }
-        }).then((response) => {
-            this.props.getVideoItems(response.data.items);
-        })
-
-        
+        this.props.onTermSubmit(this.state.input);
     }
 
     render() {
         return (
-            <form onSubmit={this.onInputSubmit} className="ui search">
-                <div className="ui icon input">
-                    <input value={this.state.input} onChange={(e) => this.onInputChange(e.target.value)} placeholder="Type a Subject" />
-                    <button className="ui button primary">Submit</button>
-                </div>
-                <div className="results"></div>
-            </form>
+            <div className="search-bar ui segment">
+                <form onSubmit={this.onSubmit} className="ui form">
+                    <div className="field">
+                        <input
+                            value={this.state.input}
+                            onChange={(e) => this.onInputChange(e.target.value)}
+                            placeholder="Type a Subject"
+                            className="search-bar__input"
+                        />
+                        <button className="ui button primary">Submit</button>
+                    </div>
+                    <div className="results"></div>
+                </form>
+            </div>
         );
     }
 }
